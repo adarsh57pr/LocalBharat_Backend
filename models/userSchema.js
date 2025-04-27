@@ -13,7 +13,11 @@ email:{
 password:{
     type:String,
     required:[true,'password is required']
-}
+},
+resetPasswordToken: {
+    type: String
+  },
+
 })
 
 module.exports = mongoose.model('user',userSchema)

@@ -18,8 +18,10 @@ const registerUser = async (req, res) => {
     } else {
         try {
             let hashPassword = await bcrypt.hashSync(password, salt)
-            let user = await userData.create({ name, email, password: hashPassword });
+            let user = await userData.create({ name, email, password: hashPassword});
             res.json({ msg: "User registerd successfully", success: true, details: user })
+
+
         } catch (error) {
             res.json({ msg: "error in creating user ", success: false, error: error.message })
         }
@@ -95,7 +97,7 @@ const forgetPassword = async (req, res) => {
         }
         let token = randomstring.generate(30);
         user.resetPasswordToken = token;
-        await user.save();
+        user.save();
         await sendEmail(email, token);
         res.json({ msg: "Reset password link sent to your email", success: true });
     } catch (error) {
@@ -129,9 +131,7 @@ async function sendEmail(email, resetToken) {
 const verifyPasswordToken = async (req, res) => {
     // res.send("password reset token verify")
     let token = req.params.token;
-    console.log(token);
     let user = await userData.findOne({ resetPasswordToken: token });
-    console.log(user);
     if (user) {
         res.render('ForgetPassword', { token })
     } else {
