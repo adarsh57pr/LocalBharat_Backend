@@ -86,6 +86,7 @@ const getProduct = async (req, res) => {
 };
 
 
+
 const updateProduct = async (req, res) => {
     try {
         const product = await Product.findByIdAndUpdate(
@@ -93,16 +94,76 @@ const updateProduct = async (req, res) => {
             req.body,
             { new: true, runValidators: true }
         );
-
+        
         if (!product) {
-            return res.status(404).json({ msg: "Product not found",  success: false });
+            return res.status(404).json({ msg: "Product not found", success: false });
         }
+        
         res.status(200).json({ msg: "Product updated successfully", success: true, product });
     } catch (error) {
         res.status(500).json({ msg: "Error updating product", success: false, error: error.message });
     }
 };
 
+
+// const updateProduct = async (req, res) => {
+//     const { id } = req.params; // Get product ID from URL params
+//     const { name, description, price, category, mukhiCount, origin, size, color, images, stock, isBlessed, benefits } = req.body;
+
+//     // Basic validation
+//     if (!name || !description || !price || !category || !mukhiCount || !origin || !size || !color || !images || !stock || !benefits) {
+//         return res.json({ msg: "All fields are required", success: false });
+//     }
+
+//     try {
+//         // Check if product exists
+//         const existingProduct = await Product.findById(id);
+//         if (!existingProduct) {
+//             return res.json({ msg: "Product not found", success: false });
+//         }
+
+//         // Check if another product already has the new name
+//         const nameConflict = await Product.findOne({ 
+//             name, 
+//             _id: { $ne: id } // Exclude current product from the check
+//         });
+//         if (nameConflict) {
+//             return res.json({ msg: "Another product with this name already exists", success: false });
+//         }
+
+//         // Update the product
+//         const updatedProduct = await Product.findByIdAndUpdate(
+//             id,
+//             {
+//                 name,
+//                 description,
+//                 price,
+//                 category,
+//                 mukhiCount,
+//                 origin,
+//                 size,
+//                 color,
+//                 images,
+//                 stock,
+//                 isBlessed: isBlessed || false,
+//                 benefits
+//             },
+//             { new: true } // Return the updated document
+//         );
+
+//         res.status(200).json({
+//             msg: "Product updated successfully",
+//             success: true,
+//             product: updatedProduct
+//         });
+//     } catch (error) {
+//         res.status(500).json({ 
+//             msg: "Error in updating product", 
+//             success: false, 
+//             error: error.message 
+//         });
+//     }
+// };
 
 const deleteProduct = async (req, res) => {
     try {

@@ -5,7 +5,6 @@ const dbConnection = require('./dataBase');
 const cors = require('cors')
 const userRouter = require('./routes/userRoute');
 const productRouter = require('./routes/productRoute');
-app.set('view engine', 'ejs');
 dbConnection();
 app.use(cors())
 app.use(express.json({limit:'50mb'}))
@@ -13,6 +12,8 @@ app.use(express.json({limit:'50mb'}))
 app.get('/',(req,res)=>{
     res.send("welcome backend")
 })
+
+app.set('view engine', 'ejs');
 
 app.use('/users',userRouter);
 app.use('/products',productRouter); 
